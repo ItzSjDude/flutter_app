@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class AccountScreen extends StatelessWidget {
+  AccountScreen ({Key ? key}) : super(key: key); 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,7 +17,7 @@ class AccountScreen extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: _buildBottomNavBar(),
+      // bottomNavigationBar: _buildBottomNavBar(),
     );
   }
 
@@ -162,15 +164,15 @@ class AccountScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildBottomNavBar() {
-    return BottomNavigationBar(
-      items: [
-        BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-        BottomNavigationBarItem(icon: Icon(Icons.attach_money), label: 'USDT'),
-        BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Mine'),
-      ],
-      currentIndex: 2,
-      selectedItemColor: Colors.blue,
-    );
-  }
+  // Widget _buildBottomNavBar() {
+  //   return BottomNavigationBar(
+  //     items: [
+  //       BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+  //       BottomNavigationBarItem(icon: Icon(Icons.attach_money), label: 'USDT'),
+  //       BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Mine'),
+  //     ],
+  //     currentIndex: 2,
+  //     selectedItemColor: Colors.blue,
+  //   );
+  // }
 }

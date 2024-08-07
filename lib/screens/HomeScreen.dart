@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
+  HomeScreen ({Key? key}) : super(key:key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,7 +27,7 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: _buildBottomNavBar(),
+      // bottomNavigationBar: _buildBottomNavBar(),
     );
   }
 
@@ -189,15 +191,15 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildBottomNavBar() {
-    return BottomNavigationBar(
-      items: [
-        BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-        BottomNavigationBarItem(icon: Icon(Icons.attach_money), label: 'USDT'),
-        BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Mine'),
-      ],
-      currentIndex: 0,
-      selectedItemColor: Colors.blue[800],
-    );
-  }
+  // Widget _buildBottomNavBar() {
+  //   return BottomNavigationBar(
+  //     items: [
+  //       BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+  //       BottomNavigationBarItem(icon: Icon(Icons.attach_money), label: 'USDT'),
+  //       BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Mine'),
+  //     ],
+  //     currentIndex: 0,
+  //     selectedItemColor: Colors.blue[800],
+  //   );
+  // }
 }
