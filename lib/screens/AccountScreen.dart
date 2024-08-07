@@ -25,17 +25,6 @@ class AccountScreen extends StatelessWidget {
     return AppBar(
       backgroundColor: Colors.transparent,
       elevation: 0,
-      title: Row(
-        children: [
-          Text('12:10'),
-          SizedBox(width: 8),
-          Icon(Icons.wifi),
-          Icon(Icons.network_cell),
-          Spacer(),
-          Text('72%'),
-          Icon(Icons.battery_full),
-        ],
-      ),
     );
   }
 
@@ -50,21 +39,21 @@ class AccountScreen extends StatelessWidget {
             child: Icon(Icons.person, size: 50, color: Colors.black),
           ),
           SizedBox(height: 8),
-          Text('Account', style: TextStyle(color: Colors.white, fontSize: 18)),
+          Text('Account', style: TextStyle(color: Colors.black, fontSize: 18)),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text('919610564153', style: TextStyle(color: Colors.white, fontSize: 20)),
-              IconButton(icon: Icon(Icons.copy, color: Colors.white), onPressed: () {}),
+              Text('919616775153', style: TextStyle(color: Colors.black, fontSize: 20)),
+              IconButton(icon: Icon(Icons.copy, color: Colors.black), onPressed: () {}),
             ],
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text('Invitation code', style: TextStyle(color: Colors.white70)),
+              Text('Invitation code', style: TextStyle(color: Colors.black)),
               SizedBox(width: 8),
-              Text('969262', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-              IconButton(icon: Icon(Icons.copy, color: Colors.white), onPressed: () {}),
+              Text('969262', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+              IconButton(icon: Icon(Icons.copy, color: Colors.black), onPressed: () {}),
             ],
           ),
         ],

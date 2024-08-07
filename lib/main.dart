@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import "screens/HomeScreen.dart";
 import 'screens/BottomNavBar.dart';
 import 'views/login_screen.dart';
+import 'screens/PersonalInfoScreen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -19,8 +20,9 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      // home:  BottomNavBar(),
-      home : LoginScreen(),
+      home:  BottomNavBar(),
+      // home: PersonalInfoScreen(),
+      // home : LoginScreen(),
       debugShowCheckedModeBanner: false,
     );
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'PersonalInfoScreen.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen ({Key? key}) : super(key:key);
@@ -37,9 +38,12 @@ class HomeScreen extends StatelessWidget {
       children: [
         Row(
           children: [
-            CircleAvatar(
-              backgroundColor: Colors.yellow,
-              child: Icon(Icons.person, color: Colors.black),
+            InkWell(
+              onTap: ()  => PersonalInfoScreen(),
+              child: CircleAvatar(
+                backgroundColor: Colors.yellow,
+                child: Icon(Icons.person, color: Colors.black),
+              ),
             ),
             SizedBox(width: 8),
           ],
