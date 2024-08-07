@@ -14,7 +14,6 @@ class RecordScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _buildDetailExchangeRow(),
-                
               ],
             ),
           ),
