@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'DetailScreen.dart';
 
 // class ExchangeScreen extends StatelessWidget {
 //   ExchangeScreen ({Key? key}) : super(key:key);
@@ -84,6 +85,7 @@ class _ExchangeScreenState extends State<ExchangeScreen> with SingleTickerProvid
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar : _buildAppBar(),
       body: Column(
         children: [
           SizedBox(height: 40),
@@ -99,7 +101,12 @@ class _ExchangeScreenState extends State<ExchangeScreen> with SingleTickerProvid
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => DetailScreen()),
+                      );
+                },
                 child: Text('Detail',style: TextStyle(color: Colors.green))),
               ElevatedButton(
                 onPressed: () {},
@@ -147,6 +154,13 @@ class _ExchangeScreenState extends State<ExchangeScreen> with SingleTickerProvid
           Text("Empty data", style: TextStyle(color: Colors.grey)),
         ],
       ),
+    );
+  }
+
+  PreferredSizeWidget _buildAppBar() {
+    return AppBar(
+      backgroundColor: Colors.transparent,
+      elevation: 0,
     );
   }
 }
