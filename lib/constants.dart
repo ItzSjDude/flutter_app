@@ -1,10 +1,13 @@
 import 'screens/AccountScreen.dart';
 import 'screens/HomeScreen.dart';
-import 'screens/RecordScreen.dart';
+import 'screens/ExchangeScreen.dart';
 
 
 List pages = [
     HomeScreen(),
-    RecordScreen(),
+    ExchangeScreen(),
     AccountScreen(),
+];
+
+List pages1 = [
 ];
