@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import "screens/HomeScreen.dart";
+import 'screens/login_screen.dart';
+import 'screens/HomeScreen.dart';
 import 'screens/BottomNavBar.dart';
 import 'views/login_screen.dart';
 import 'screens/PersonalInfoScreen.dart';
@@ -20,16 +21,10 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home:  BottomNavBar(),
+      home: LoginScreen(), // Set LoginScreen as the initial screen
       // home: PersonalInfoScreen(),
       // home : LoginScreen(),
       debugShowCheckedModeBanner: false,
     );
   }
 }
-
-
-
-
-
-
