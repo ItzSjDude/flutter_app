@@ -14,7 +14,8 @@ class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderSt
   List<dynamic> _incomeRecords = [];
   bool _isLoadingExpenditure = true;
   bool _isLoadingIncome = true;
-  String? _errorMessage; // To store error messages
+  String? _errorMessageExpenditure; // Separate error messages
+  String? _errorMessageIncome;
   late int _userId; // To store the user ID
 
   @override
@@ -49,7 +50,8 @@ class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderSt
       setState(() {
         _isLoadingExpenditure = false;
         _isLoadingIncome = false;
-        _errorMessage = 'User ID not found or invalid.';
+        _errorMessageExpenditure = 'User ID not found or invalid.';
+        _errorMessageIncome = 'User ID not found or invalid.';
       });
     }
   }
@@ -71,19 +73,19 @@ class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderSt
         } else {
           setState(() {
             _isLoadingExpenditure = false;
-            _errorMessage = 'Error fetching expenditure records.';
+            _errorMessageExpenditure = 'Error fetching expenditure records.';
           });
         }
       } else {
         setState(() {
           _isLoadingExpenditure = false;
-          _errorMessage = 'Failed to connect to the server.';
+          _errorMessageExpenditure = 'Failed to connect to the server.';
         });
       }
     } catch (error) {
       setState(() {
         _isLoadingExpenditure = false;
-        _errorMessage = 'An error occurred: $error';
+        _errorMessageExpenditure = 'An error occurred: $error';
       });
     }
   }
@@ -105,19 +107,19 @@ class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderSt
         } else {
           setState(() {
             _isLoadingIncome = false;
-            _errorMessage = 'Error fetching income records.';
+            _errorMessageIncome = 'Error fetching income records.';
           });
         }
       } else {
         setState(() {
           _isLoadingIncome = false;
-          _errorMessage = 'Failed to connect to the server.';
+          _errorMessageIncome = 'Failed to connect to the server.';
         });
       }
     } catch (error) {
       setState(() {
         _isLoadingIncome = false;
-        _errorMessage = 'An error occurred: $error';
+        _errorMessageIncome = 'An error occurred: $error';
       });
     }
   }
@@ -125,14 +127,14 @@ class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderSt
   Widget _buildExpenditureTab() {
     if (_isLoadingExpenditure) {
       return Center(child: CircularProgressIndicator());
-    } else if (_errorMessage != null) {
+    } else if (_errorMessageExpenditure != null) {
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(Icons.error, size: 64, color: Colors.red),
             SizedBox(height: 16),
-            Text(_errorMessage!, style: TextStyle(color: Colors.red, fontSize: 18)),
+            Text(_errorMessageExpenditure!, style: TextStyle(color: Colors.red, fontSize: 18)),
           ],
         ),
       );
@@ -158,14 +160,14 @@ class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderSt
   Widget _buildIncomeTab() {
     if (_isLoadingIncome) {
       return Center(child: CircularProgressIndicator());
-    } else if (_errorMessage != null) {
+    } else if (_errorMessageIncome != null) {
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(Icons.error, size: 64, color: Colors.red),
             SizedBox(height: 16),
-            Text(_errorMessage!, style: TextStyle(color: Colors.red, fontSize: 18)),
+            Text(_errorMessageIncome!, style: TextStyle(color: Colors.red, fontSize: 18)),
           ],
         ),
       );
