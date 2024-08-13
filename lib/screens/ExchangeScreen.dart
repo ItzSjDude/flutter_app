@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'DetailScreen.dart';
+import 'DepositScreen.dart'; // Import the DepositScreen
 
 class ExchangeScreen extends StatefulWidget {
   @override
@@ -139,7 +140,12 @@ class _ExchangeScreenState extends State<ExchangeScreen> with SingleTickerProvid
             text: 'Detail',
           ),
           _buildRoundedButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => DepositScreen()),
+              );
+            },
             color: Colors.greenAccent,
             text: 'Exchange',
           ),

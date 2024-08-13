@@ -46,6 +46,7 @@ class _LoginScreenState extends State<LoginScreen> {
           final username = user['username']?.toString() ?? '';
           final userEmail = user['email']?.toString() ?? '';
           final phone = user['phone']?.toString() ?? '';
+          final balance = user['balance']?.toString() ?? '';
           final referralCode = user['referral_code']?.toString() ?? '';
 
           final prefs = await SharedPreferences.getInstance();
@@ -53,6 +54,7 @@ class _LoginScreenState extends State<LoginScreen> {
           await prefs.setString('username', username);
           await prefs.setString('email', userEmail);
           await prefs.setString('phone', phone);
+          await prefs.setString('balance', balance);
           await prefs.setString('referralCode', referralCode);
 
           Navigator.of(context).pushReplacement(

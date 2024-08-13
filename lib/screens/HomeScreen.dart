@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'PersonalInfoScreen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -14,15 +15,20 @@ class _HomeScreenState extends State<HomeScreen> {
   List<dynamic> _products = [];
   bool _isLoading = true;
   String _errorMessage = '';
+  double _totalUSDT = 0.0;
+  double _totalINR = 0.0;
+  double _conversionRate = 0.0;
 
   @override
   void initState() {
     super.initState();
     _fetchProducts();
+    _fetchConversionRate();
+    _loadSavedValues(); // Load saved values from SharedPreferences
   }
 
   Future<void> _fetchProducts() async {
-    final url = 'https://tl.brainyhub.in/api/get_products.php';
+    final url = 'https://tl.brainyhub.in/api/get_products.php'; // Replace with your products API URL
 
     try {
       final response = await http.get(Uri.parse(url));
@@ -30,20 +36,67 @@ class _HomeScreenState extends State<HomeScreen> {
       if (response.statusCode == 200) {
         setState(() {
           _products = json.decode(response.body);
-          _isLoading = false;
         });
       } else {
         setState(() {
           _errorMessage = 'Failed to load products.';
-          _isLoading = false;
         });
       }
     } catch (error) {
       setState(() {
         _errorMessage = 'An error occurred: $error';
-        _isLoading = false;
       });
     }
+  }
+
+  Future<void> _fetchConversionRate() async {
+    final url = 'http://tl.brainyhub.in/api/get_inr_value.php?id=1'; // Replace with actual domain or IP
+
+    try {
+      final response = await http.get(Uri.parse(url));
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+
+        if (data.containsKey('inr_value')) {
+          setState(() {
+            _conversionRate = double.tryParse(data['inr_value']) ?? 0.0;
+          });
+          await _calculateTotalINR(); // Update total INR after fetching conversion rate
+        } else {
+          print('Error from API: ${data['error']}');
+        }
+      } else {
+        print('Failed to load conversion rate.');
+      }
+    } catch (error) {
+      print('Error fetching conversion rate: $error');
+    }
+  }
+
+  Future<void> _calculateTotalINR() async {
+    final prefs = await SharedPreferences.getInstance();
+    double usdtBalance = double.tryParse(prefs.getString('balance') ?? '0.0') ?? 0.0;
+
+    double totalINR = usdtBalance * _conversionRate;
+
+    setState(() {
+      _totalUSDT = usdtBalance;
+      _totalINR = totalINR;
+      _isLoading = false;
+    });
+
+    // Save the calculated values to SharedPreferences
+    await prefs.setDouble('totalUSDT', _totalUSDT);
+    await prefs.setDouble('totalINR', _totalINR);
+  }
+
+  Future<void> _loadSavedValues() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _totalUSDT = prefs.getDouble('totalUSDT') ?? 0.0;
+      _totalINR = prefs.getDouble('totalINR') ?? 0.0;
+    });
   }
 
   @override
@@ -159,11 +212,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
               SizedBox(height: 16),
-              _buildTransactionInfo('Total number of transactions', '0 INR'),
+              _buildTransactionInfo('Total USDT Balance', '$_totalUSDT USDT'),
               SizedBox(height: 8),
-              _buildTransactionInfo('Total Value(USDT)', '0.0000'),
+              _buildTransactionInfo('Total Value (INR)', '${_totalINR.toStringAsFixed(2)} INR'),
               Text(
-                '≈ 0.00 INR',
+                '≈ ${_totalINR.toStringAsFixed(2)} INR',
                 style: TextStyle(color: Colors.white70),
               ),
             ],
@@ -212,8 +265,8 @@ class _HomeScreenState extends State<HomeScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  _buildProfitInfo('Today(USDT)', '0.0000'),
-                  _buildProfitInfo('Total(USDT)', '0.0000'),
+                  _buildProfitInfo('Today (USDT)', '0.0000'),
+                  _buildProfitInfo('Total (USDT)', '0.0000'),
                 ],
               ),
             ],
@@ -228,7 +281,10 @@ class _HomeScreenState extends State<HomeScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(label, style: TextStyle(color: Colors.white70)),
-        Text(value, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+        Text(
+          value,
+          style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+        ),
       ],
     );
   }
@@ -242,7 +298,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Today Price: 92.2 INR', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            Text('Today Price: ${_conversionRate.toStringAsFixed(2)} INR', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             ElevatedButton(
               onPressed: () {},
               child: Text('Exchange'),

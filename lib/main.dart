@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 import "screens/HomeScreen.dart";
 import 'screens/BottomNavBar.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'screens/login_screen.dart';
 import 'screens/PersonalInfoScreen.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    // Wrap the entire app with ProviderScope
+    const ProviderScope(
+      child: MyApp(),
+    ),
+  );
 }
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
