@@ -1,8 +1,10 @@
+import 'package:Nova_XLink/screens/WithdrawalScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'PersonalInfoScreen.dart';
+import 'DepositScreen.dart'; // Import the DepositScreen
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -202,7 +204,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   Icon(Icons.currency_exchange, color: Colors.white),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => DepositScreen()),
+                      );
+                    },
                     child: Text('Deposit'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.green,
@@ -300,7 +307,12 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             Text('Today Price: ${_conversionRate.toStringAsFixed(2)} INR', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => WithdrawalScreen()),
+                );
+              },
               child: Text('Exchange'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.green,

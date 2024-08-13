@@ -1,9 +1,10 @@
+import 'package:Nova_XLink/screens/WithdrawalScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'DetailScreen.dart';
-import 'DepositScreen.dart'; // Import the DepositScreen
+// import 'DepositScreen.dart'; // Import the DepositScreen
 
 class ExchangeScreen extends StatefulWidget {
   @override
@@ -143,7 +144,7 @@ class _ExchangeScreenState extends State<ExchangeScreen> with SingleTickerProvid
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => DepositScreen()),
+                MaterialPageRoute(builder: (context) => WithdrawalScreen()),
               );
             },
             color: Colors.greenAccent,

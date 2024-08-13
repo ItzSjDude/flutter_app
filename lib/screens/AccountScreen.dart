@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'DepositScreen.dart';
+import 'WithdrawalScreen.dart';
 
 class AccountScreen extends StatefulWidget {
   @override
@@ -24,6 +27,22 @@ class _AccountScreenState extends State<AccountScreen> {
       'phoneNumber': phoneNumber,
       'invitationCode': invitationCode,
     };
+  }
+
+  Future<void> _launchTelegram() async {
+    const telegramUrl = 'https://t.me/novaxlink'; // Replace with your actual Telegram group URL
+    final Uri uri = Uri.parse(telegramUrl);
+
+    try {
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(uri, mode: LaunchMode.externalApplication);
+      } else {
+        throw 'Could not launch $telegramUrl';
+      }
+    } catch (e) {
+      // Handle the exception and provide feedback to the user
+      print(e); // Replace this with a more user-friendly message if needed
+    }
   }
 
   @override
@@ -85,40 +104,28 @@ class _AccountScreenState extends State<AccountScreen> {
           ),
           SizedBox(height: 16),
           Text('Account', style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold)),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(phoneNumber, style: TextStyle(color: Colors.white, fontSize: 20)),
-              IconButton(
-                icon: Icon(Icons.copy, color: Colors.white),
-                onPressed: () {
-                  Clipboard.setData(ClipboardData(text: phoneNumber));
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Phone number copied to clipboard')),
-                  );
-                },
-              ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text('Invitation code', style: TextStyle(color: Colors.white70)),
-              SizedBox(width: 8),
-              Text(invitationCode, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-              IconButton(
-                icon: Icon(Icons.copy, color: Colors.white),
-                onPressed: () {
-                  Clipboard.setData(ClipboardData(text: invitationCode));
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Invitation code copied to clipboard')),
-                  );
-                },
-              ),
-            ],
-          ),
+          _buildCopyRow(phoneNumber),
+          _buildCopyRow('Invitation code: $invitationCode'),
         ],
       ),
+    );
+  }
+
+  Widget _buildCopyRow(String text) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Expanded(child: Text(text, style: TextStyle(color: Colors.white, fontSize: 20))),
+        IconButton(
+          icon: Icon(Icons.copy, color: Colors.white),
+          onPressed: () {
+            Clipboard.setData(ClipboardData(text: text));
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Copied to clipboard')),
+            );
+          },
+        ),
+      ],
     );
   }
 
@@ -127,13 +134,9 @@ class _AccountScreenState extends State<AccountScreen> {
       padding: const EdgeInsets.all(16.0),
       child: Row(
         children: [
-          Expanded(
-            child: _buildBalanceCard('Balance (USDT)', usdtBalance, Colors.orange),
-          ),
+          Expanded(child: _buildBalanceCard('Balance (USDT)', usdtBalance, Colors.orange)),
           SizedBox(width: 16),
-          Expanded(
-            child: _buildBalanceCard('≈ INR', inrBalance, Colors.green),
-          ),
+          Expanded(child: _buildBalanceCard('≈ INR', inrBalance, Colors.green)),
         ],
       ),
     );
@@ -167,20 +170,32 @@ class _AccountScreenState extends State<AccountScreen> {
 
   Widget _buildMenuItems() {
     final menuItems = [
-      {'icon': Icons.person, 'title': 'Personal', 'color': Colors.blue},
-      {'icon': Icons.group, 'title': 'Team', 'color': Colors.green},
-      {'icon': Icons.attach_money, 'title': 'USDT Withdrawal', 'color': Colors.orange},
-      {'icon': Icons.account_balance_wallet, 'title': 'Deposit', 'color': Colors.purple},
-      {'icon': Icons.receipt, 'title': 'Bill', 'color': Colors.red},
-      {'icon': Icons.help, 'title': 'Help', 'color': Colors.teal},
+      {'icon': Icons.person, 'title': 'Personal', 'color': Colors.blue, 'screen': null},
+      {'icon': Icons.group, 'title': 'Team', 'color': Colors.green, 'screen': null},
+      {'icon': Icons.attach_money, 'title': 'USDT Withdrawal', 'color': Colors.orange, 'screen': WithdrawalScreen()},
+      {'icon': Icons.account_balance_wallet, 'title': 'Deposit', 'color': Colors.purple, 'screen': DepositScreen()},
+      {'icon': Icons.receipt, 'title': 'Bill', 'color': Colors.red, 'screen': null},
+      {'icon': Icons.telegram, 'title': 'Telegram Support', 'color': Colors.blue, 'screen': null},
     ];
 
     return Column(
-      children: menuItems.map((item) => _buildMenuItem(item['icon'] as IconData, item['title'] as String, item['color'] as Color)).toList(),
+      children: menuItems.map((item) {
+        return _buildMenuItem(
+          item['icon'] as IconData,
+          item['title'] as String,
+          item['color'] as Color,
+          item['screen'] != null
+              ? () => Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => item['screen'] as Widget),
+          )
+              : item['title'] == 'Telegram Support' ? () => _launchTelegram() : null,
+        );
+      }).toList(),
     );
   }
 
-  Widget _buildMenuItem(IconData icon, String title, Color color) {
+  Widget _buildMenuItem(IconData icon, String title, Color color, [VoidCallback? onTap]) {
     return Card(
       margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -192,6 +207,7 @@ class _AccountScreenState extends State<AccountScreen> {
         ),
         title: Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
         trailing: Icon(Icons.chevron_right, color: color),
+        onTap: onTap,
       ),
     );
   }
@@ -221,8 +237,7 @@ class _AccountScreenState extends State<AccountScreen> {
             ],
           ),
           SizedBox(height: 8),
-          Text('Invite link: https://tl.brainyhub.in/invite?code=$invitationCode',
-              style: TextStyle(color: Colors.white70)),
+          Text('Invite link: https://tl.brainyhub.in/invite?code=$invitationCode', style: TextStyle(color: Colors.white70)),
           SizedBox(height: 16),
           ElevatedButton.icon(
             icon: Icon(Icons.copy, color: primaryColor),
@@ -234,10 +249,7 @@ class _AccountScreenState extends State<AccountScreen> {
               );
             },
             style: ElevatedButton.styleFrom(
-              foregroundColor: primaryColor,
-              backgroundColor: Colors.white,
-              minimumSize: Size(double.infinity, 50),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+              foregroundColor: primaryColor, backgroundColor: Colors.white,
             ),
           ),
         ],
